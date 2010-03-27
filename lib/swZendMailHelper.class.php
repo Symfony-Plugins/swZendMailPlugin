@@ -78,7 +78,7 @@ class swZendMailHelper
       set_include_path(sfConfig::get('sf_lib_dir').'/vendor'.PATH_SEPARATOR.get_include_path());
     }
 
-    if(!sfAutoload::getInstance()->autoload('Zend_Loader'))
+    if(!class_exists('Zend_Loader'))
     {
       throw new LogicException('Please install Zend Framework Library inside : '.sfConfig::get('sf_lib_dir').'/vendor');
     }
@@ -179,9 +179,10 @@ class swZendMailHelper
       $transport_settings = array($transport_settings);
     }
     
-    if(!sfAutoload::getInstance()->loadClass($transport_class))
+    if(!class_exists($transport_class))
     {
-      throw new LogicException('Please configure the mail swToolboxPlugin settings');
+      
+      throw new LogicException('Please configure the mail swToolboxPlugin settings, unable to load transport class : '.$transport_class);
     }
     
     $reflection_class = new ReflectionClass($transport_class);
